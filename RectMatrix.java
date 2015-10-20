@@ -3,7 +3,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 /**
- * Created by ulihtenshtein on 20.10.15.
+ * Created by oborovsky on 20.10.15.
  */
 public class RectMatrix implements IMatrix {
     private ArrayList<Double> mList;
