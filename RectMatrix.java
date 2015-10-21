@@ -3,10 +3,10 @@ import java.util.Arrays;
 import java.util.Random;
 
 /**
- * Created by ulihtenshtein on 20.10.15.
+ * Created by oborovsky on 20.10.15.
  */
 public class RectMatrix implements IMatrix {
-    private ArrayList<Double> mList;
+    protected ArrayList<Double> mList;
     @Override
     public int getWidth()
     {
@@ -35,8 +35,8 @@ public class RectMatrix implements IMatrix {
         mHight = hight;
     }
 
-    private int mWidth;
-    private int mHight;
+    protected int mWidth;
+    protected int mHight;
 
     public RectMatrix(int w, int h)
     {
@@ -119,7 +119,7 @@ public class RectMatrix implements IMatrix {
         }
         return sum;
     }
-    public static IMatrix generateZeroMatrix(int w, int h)
+    public static RectMatrix generateZeroMatrix(int w, int h)
     {
         ArrayList<Double> list =  new ArrayList<Double>();
         for (int i = 0; i < w*h; i++)

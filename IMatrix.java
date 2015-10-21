@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 /**
- * Created by ulihtenshtein on 08.10.15.
+ * Created by oborovsky on 08.10.15.
  */
 public interface IMatrix {
     int getWidth();
