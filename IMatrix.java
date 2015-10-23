@@ -5,10 +5,10 @@ import java.util.List;
  */
 public interface IMatrix {
     int getWidth();
-    int getHight();
+    int getHeight();
     List<Double> getList();
     void setWidth(final int width);
-    void setHight(final int hight);
+    void setHeight(final int hight);
     IMatrix mult(double k);
     IMatrix mult(IMatrix m);
     IMatrix add(IMatrix m);

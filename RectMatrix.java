@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -19,7 +18,7 @@ public class RectMatrix implements IMatrix {
         mWidth = width;
     }
     @Override
-    public int getHight()
+    public int getHeight()
     {
         return mHight;
     }
@@ -31,7 +30,7 @@ public class RectMatrix implements IMatrix {
     }
 
     @Override
-    public void setHight(final int hight)
+    public void setHeight(final int hight)
     {
         mHight = hight;
     }
@@ -72,7 +71,7 @@ public class RectMatrix implements IMatrix {
     @Override
     public IMatrix mult(final IMatrix m)
     {
-        if (mWidth != m.getHight())
+        if (mWidth != m.getHeight())
         {
             throw new IllegalArgumentException("the width of the first matrix isn't equals to the hight of the second");
         }
@@ -98,7 +97,7 @@ public class RectMatrix implements IMatrix {
     @Override
     public IMatrix add(final IMatrix m)
     {
-        if (mWidth != m.getWidth() || mHight != m.getHight())
+        if (mWidth != m.getWidth() || mHight != m.getHeight())
         {
             throw new IllegalArgumentException("width or hight isn't equals");
         }

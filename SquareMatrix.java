@@ -111,7 +111,7 @@ public class SquareMatrix extends RectMatrix implements IMatrix {
     @Override
     public IMatrix mult(IMatrix m)
     {
-        if (mWidth != m.getHight())
+        if (mWidth != m.getHeight())
         {
             throw new IllegalArgumentException("the width of the first matrix isn't equals to the hight of the second");
         }
@@ -159,7 +159,7 @@ public class SquareMatrix extends RectMatrix implements IMatrix {
         SquareMatrix one = SquareMatrix.generateOneMatrix(3);
 
         System.out.println(m);
-        System.out.println((SquareMatrix)m.transpose());
+        System.out.println(m.transpose());
         System.out.println(one);
         SquareMatrix e2 = SquareMatrix.generateOneMatrix(3);
         IMatrix mm = e2.mult(2.0);
@@ -175,7 +175,6 @@ public class SquareMatrix extends RectMatrix implements IMatrix {
         mm.setCell(2, 2, 3.0);
         System.out.println(mm);
         System.out.println(((SquareMatrix)mm).determine());
-        IMatrix mmm = m.mult(one);
         System.out.println(m);
         System.out.println(m.determine());
         SquareMatrix E = SquareMatrix.generateOneMatrix(3);
