@@ -42,11 +42,11 @@ public class RectMatrix implements IMatrix {
     {
         mWidth = w;
         mHight = h;
-        mList = new ArrayList<Double>(w*h);
+        mList = new ArrayList<Double>();
         Random rnd = new Random();
         for (int i = 0; i < h*w; i++)
         {
-            mList.set(i,rnd.nextDouble());
+            mList.add(Double(rnd.nextDouble());
         }
 
     }
@@ -184,6 +184,7 @@ public class RectMatrix implements IMatrix {
             System.out.println(m5);
             System.out.println(m5.mult(RectMatrix.generateZeroMatrix(3,3)));
             System.out.println(RectMatrix.generateZeroMatrix(3,2).add(m2).mult(2.0).sum());
+            System.out.println(new RectMatrix(2,3));
         }
         catch ( Exception e)
         {
