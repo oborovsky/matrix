@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by oborovsky on 08.10.15.
@@ -6,12 +6,14 @@ import java.util.ArrayList;
 public interface IMatrix {
     int getWidth();
     int getHight();
-    ArrayList<Double> getList();
+    List<Double> getList();
     void setWidth(final int width);
     void setHight(final int hight);
     IMatrix mult(double k);
     IMatrix mult(IMatrix m);
     IMatrix add(IMatrix m);
+    void setCell(int i, int j, double a);
+    IMatrix generateEij(int i, int j);
     double sum();
 
 }

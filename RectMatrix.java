@@ -1,12 +1,13 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 /**
  * Created by oborovsky on 20.10.15.
  */
 public class RectMatrix implements IMatrix {
-    protected ArrayList<Double> mList;
+    protected List<Double> mList;
     @Override
     public int getWidth()
     {
@@ -24,7 +25,7 @@ public class RectMatrix implements IMatrix {
     }
 
     @Override
-    public ArrayList<Double> getList()
+    public List<Double> getList()
     {
         return new ArrayList<Double>(mList);
     }
@@ -50,7 +51,7 @@ public class RectMatrix implements IMatrix {
         }
 
     }
-    public RectMatrix(int w, int h, ArrayList<Double> list )
+    public RectMatrix(int w, int h, List<Double> list )
     {
         mList = list;
         mWidth = w;
@@ -59,7 +60,7 @@ public class RectMatrix implements IMatrix {
     @Override
     public IMatrix mult(final double k)
     {
-        ArrayList<Double> list = new ArrayList<Double>(mList);
+        List<Double> list = new ArrayList<Double>(mList);
         for (int i = 0; i < list.size(); i++)
         {
             list.set(i, list.get(i)*k);
@@ -75,9 +76,9 @@ public class RectMatrix implements IMatrix {
         {
             throw new IllegalArgumentException("the width of the first matrix isn't equals to the hight of the second");
         }
-        ArrayList<Double> list = new ArrayList<Double>();
-        ArrayList<Double> m1 = getList();
-        ArrayList<Double> m2 = m.getList();
+        List<Double> list = new ArrayList<Double>();
+        List<Double> m1 = getList();
+        List<Double> m2 = m.getList();
         int w = m.getWidth();
         for (int i = 0; i < mHight; i++)
         {
@@ -101,12 +102,24 @@ public class RectMatrix implements IMatrix {
         {
             throw new IllegalArgumentException("width or hight isn't equals");
         }
-        ArrayList<Double> list = new ArrayList<Double>(mList);
+        List<Double> list = new ArrayList<Double>(mList);
         for (int i = 0; i < list.size(); i++)
         {
             list.set(i,list.get(i) + m.getList().get(i));
         }
         return  new RectMatrix(mWidth, mHight, list);
+    }
+
+    @Override
+    public void setCell(final int i, final int j, final double a)
+    {
+        mList.set(i*mWidth+j, a);
+    }
+
+    @Override
+    public IMatrix generateEij(final int i, final int j)
+    {
+        return null;
     }
 
     @Override
@@ -121,7 +134,7 @@ public class RectMatrix implements IMatrix {
     }
     public static RectMatrix generateZeroMatrix(int w, int h)
     {
-        ArrayList<Double> list =  new ArrayList<Double>();
+        List<Double> list =  new ArrayList<Double>();
         for (int i = 0; i < w*h; i++)
         {
             list.add(0.0);
@@ -132,19 +145,24 @@ public class RectMatrix implements IMatrix {
     @Override
     public String toString()
     {
-        return "RectMatrix{" +
-                "mWidth=" + mWidth +
-                ", mHight=" + mHight +
-                ", mList=" + mList +
-                '}';
+        String str = "";
+        for ( int i = 0; i < mHight; i++)
+        {
+            for (int j = 0; j < mWidth; j++)
+            {
+                str += mList.get(i*mWidth + j) + " ";
+            }
+            str += "\n";
+        }
+        return str;
     }
 
     public  static void main(String[] args)
     {
         double[] l1 = {1,1,2,2,3,3};
         double[] l2 = {1,1,1,1,1,1};
-        ArrayList<Double> list1 = new ArrayList<Double>();
-        ArrayList<Double> list2 = new ArrayList<Double>();
+        List<Double> list1 = new ArrayList<Double>();
+        List<Double> list2 = new ArrayList<Double>();
         for (int i = 0; i < 6; i++)
         {
             list1.add(l1[i]);
@@ -170,7 +188,7 @@ public class RectMatrix implements IMatrix {
         }
         catch ( Exception e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("error:" + e.getCause()+ " ->" + e.getMessage());
         }
     }
 }
