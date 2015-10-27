@@ -46,7 +46,7 @@ public class RectMatrix implements IMatrix {
         Random rnd = new Random();
         for (int i = 0; i < h*w; i++)
         {
-            mList.add(Double(rnd.nextDouble());
+            mList.add(rnd.nextDouble());
         }
 
     }
@@ -64,7 +64,8 @@ public class RectMatrix implements IMatrix {
         {
             list.set(i, list.get(i)*k);
         }
-        return new RectMatrix(mWidth, mHight, list);
+        IMatrix result = new RectMatrix(mWidth, mHight, list);
+        return result;
 
     }
 
@@ -91,7 +92,8 @@ public class RectMatrix implements IMatrix {
                 list.add(r);
             }
         }
-        return new RectMatrix(w, mHight, list );
+        IMatrix result = new RectMatrix(w, mHight, list );
+        return result;
     }
 
     @Override
@@ -106,7 +108,9 @@ public class RectMatrix implements IMatrix {
         {
             list.set(i,list.get(i) + m.getList().get(i));
         }
-        return  new RectMatrix(mWidth, mHight, list);
+        IMatrix result = new RectMatrix(mWidth, mHight, list);
+
+        return  result;
     }
 
     @Override
@@ -118,7 +122,9 @@ public class RectMatrix implements IMatrix {
     @Override
     public IMatrix generateEij(final int i, final int j)
     {
-        return null;
+        IMatrix eij = RectMatrix.generateZeroMatrix(mWidth, mHight);
+        eij.setCell(i, j, 1.0);
+        return eij;
     }
 
     @Override
@@ -131,14 +137,15 @@ public class RectMatrix implements IMatrix {
         }
         return sum;
     }
-    public static RectMatrix generateZeroMatrix(int w, int h)
+    public static IMatrix generateZeroMatrix(int w, int h)
     {
         List<Double> list =  new ArrayList<Double>();
         for (int i = 0; i < w*h; i++)
         {
             list.add(0.0);
         }
-       return new RectMatrix(w, h,list);
+        IMatrix zero = new RectMatrix(w, h,list);
+       return  zero;
     }
 
     @Override

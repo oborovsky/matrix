@@ -1,45 +1,60 @@
+import org.w3c.dom.css.Rect;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by oborovsky on 21.10.15.
  */
-public class SquareMatrix extends RectMatrix implements IMatrix {
+public class SquareMatrix  implements IMatrix {
+    private IMatrix mMatrix;
+
+    public SquareMatrix(IMatrix matrix)
+    {
+        mMatrix = matrix;
+        if( mMatrix.getWidth() != mMatrix.getHeight())
+        {
+            int min = Math.min(mMatrix.getHeight(), mMatrix.getWidth());
+            mMatrix.setWidth(min);
+            mMatrix.setHeight(min);
+        }
+    }
     public SquareMatrix(int n, List<Double> list)
     {
-        super(n, n, list);
+        mMatrix = new RectMatrix(n , n, list);
     }
     public SquareMatrix(int n, double[] array)
     {
-        super(n,n);
         List<Double> list = new ArrayList<Double>();
         for (int i = 0; i < n*n; i++)
         {
             list.add(array[i]);
         }
-        mList = list;
+        mMatrix = new RectMatrix(n, n, list);
     }
     public SquareMatrix(int n)
     {
-        super(n,n);
+        mMatrix = new RectMatrix(n,n);
     }
     public SquareMatrix transpose()
     {
-        int n = mWidth;
+        int n = mMatrix.getWidth();
+        List<Double> cur = mMatrix.getList();
         List<Double> list = new ArrayList<Double>();
         for (int i = 0; i < n; i++)
         {
             for (int j = 0; j < n; j++)
             {
-                list.add(mList.get(j * n + i));
+                list.add(cur.get(j * n + i));
             }
         }
         return new SquareMatrix(n, list);
     }
     public double determine()
     {
-        List<Double> list = new ArrayList<Double>(mList);
-        int n = mWidth;
+        List<Double> list = mMatrix.getList();
+        int n = mMatrix.getWidth();
         double r = 0;
         for (int i = 0; i < n; i++)
         {
@@ -76,76 +91,87 @@ public class SquareMatrix extends RectMatrix implements IMatrix {
         }
         return r;
     }
-    public static SquareMatrix generateOneMatrix(int n)
+    public static IMatrix generateOneMatrix(int n)
     {
-        List<Double> list = new ArrayList<Double>();
+        IMatrix tmp = RectMatrix.generateZeroMatrix(n,n);
         for (int i = 0; i < n; i++)
         {
-            for (int j = 0; j < n; j++)
-            {
-                if ( j == i)
-                {
-                    list.add(1.0);
-                }
-                else
-                {
-                    list.add(0.0);
-                }
-            }
+            tmp.setCell(i,i, 1.0);
         }
-        return  new SquareMatrix(n, list);
+        IMatrix e = new SquareMatrix(n, tmp.getList());
+        return  e;
+    }
+
+    @Override
+    public int getWidth()
+    {
+        return mMatrix.getWidth();
+    }
+
+    @Override
+    public int getHeight()
+    {
+        return mMatrix.getHeight();
+    }
+
+    @Override
+    public List<Double> getList()
+    {
+        return mMatrix.getList();
+    }
+
+    @Override
+    public void setWidth(final int width)
+    {
+        mMatrix.setWidth(width);
+    }
+
+    @Override
+    public void setHeight(final int hight)
+    {
+        mMatrix.setHeight(hight);
     }
 
     @Override
     public IMatrix mult(double k)
     {
-        List<Double> list = new ArrayList<Double>(mList);
-        for (int i = 0; i < list.size(); i++)
-        {
-            list.set(i, list.get(i)*k);
-        }
-        return new SquareMatrix(mWidth, list);
-
+        return new SquareMatrix(mMatrix.mult(k));
     }
 
     @Override
     public IMatrix mult(IMatrix m)
     {
-        if (mWidth != m.getHeight())
-        {
-            throw new IllegalArgumentException("the width of the first matrix isn't equals to the hight of the second");
-        }
-        List<Double> list = new ArrayList<Double>();
-        List<Double> m1 = getList();
-        List<Double> m2 = m.getList();
-        int w = m.getWidth();
-        for (int i = 0; i < mHight; i++)
-        {
-            for (int j = 0; j < m.getWidth(); j++)
-            {
-                double r = 0;
-                for (int k = 0; k < mWidth; k++)
-                {
-                    r += m1.get(i*mWidth+k) * m2.get(w*k + j);
-                }
-                list.add(r);
-            }
-        }
-        return new SquareMatrix(w, list );
+        return new SquareMatrix(mMatrix.mult(m));
     }
 
     @Override
     public IMatrix add(IMatrix m)
     {
-        return new SquareMatrix(mWidth,super.add(m).getList());
+        return new SquareMatrix(mMatrix.add(m));
+    }
+
+    @Override
+    public void setCell(final int i, final int j, final double a)
+    {
+        mMatrix.setCell(i, j, a);
     }
 
     //@Override
     public IMatrix generateEij(final int i, final int j)
     {
-        List<Double> list = (RectMatrix.generateZeroMatrix(mWidth, mWidth)).getList();
-        list.set(i*mWidth + j,1.0);
-        return new SquareMatrix(mWidth, list);
+        return new SquareMatrix(mMatrix.generateEij(i, j));
+    }
+
+    @Override
+    public double sum()
+    {
+        return mMatrix.sum();
+    }
+
+    @Override
+    public String toString()
+    {
+        return mMatrix.toString();
     }
 
     public static void main(String[] args)
@@ -155,34 +181,41 @@ public class SquareMatrix extends RectMatrix implements IMatrix {
         {
             l1.add((double)i);
         }
-        SquareMatrix m = new SquareMatrix(3,l1);
-        SquareMatrix one = SquareMatrix.generateOneMatrix(3);
 
-        System.out.println(m);
-        System.out.println(m.transpose());
-        System.out.println(one);
-        SquareMatrix e2 = SquareMatrix.generateOneMatrix(3);
-        IMatrix mm = e2.mult(2.0);
+        try
+        {
+            IMatrix m = new SquareMatrix(3,l1);
+            IMatrix one = SquareMatrix.generateOneMatrix(3);
+
+            System.out.println(m);
+            System.out.println(((SquareMatrix) m).transpose());
+            System.out.println(one);
+            IMatrix e2 = SquareMatrix.generateOneMatrix(3);
+            IMatrix mm = e2.mult(2.0);
 //        e2 = (SquareMatrix) e2.mult(2.0);
-        mm.setCell(0,0,1.0);
-        mm.setCell(0,1,2.0);
-        mm.setCell(0, 2, 3.0);
-        mm.setCell(1, 0, 1.0);
-        mm.setCell(1, 1, 2.0);
-        mm.setCell(1, 2, 3.0);
-        mm.setCell(2, 0, 1.0);
-        mm.setCell(2, 1, 2.0);
-        mm.setCell(2, 2, 3.0);
-        System.out.println(mm);
-        System.out.println(((SquareMatrix)mm).determine());
-        System.out.println(m);
-        System.out.println(m.determine());
-        SquareMatrix E = SquareMatrix.generateOneMatrix(3);
-        IMatrix m3 = E.generateEij(0, 0).mult(2).add(E.generateEij(0, 1).mult(3)).add(E.generateEij(0,2).mult(5));
-        m3 = m3.add(E.generateEij(1,0).mult(3)).add(E.generateEij(1,1).mult(6)).add(E.generateEij(1,2).mult(7));
-        m3 = m3.add(E.generateEij(2,0).mult(9)).add(E.generateEij(2,1).mult(11)).add(E.generateEij(2,2).mult(3));
-        System.out.println(m3);
-        System.out.println(((SquareMatrix) m3).determine());
+            mm.setCell(0,0,1.0);
+            mm.setCell(0,1,2.0);
+            mm.setCell(0, 2, 3.0);
+            mm.setCell(1, 0, 1.0);
+            mm.setCell(1, 1, 2.0);
+            mm.setCell(1, 2, 3.0);
+            mm.setCell(2, 0, 1.0);
+            mm.setCell(2, 1, 2.0);
+            mm.setCell(2, 2, 3.0);
+            System.out.println(mm);
+            System.out.println(((SquareMatrix)mm).determine());
+            System.out.println(m);
+            System.out.println(((SquareMatrix) m).determine());
+            IMatrix E = SquareMatrix.generateOneMatrix(3);
+            IMatrix m3 = E.generateEij(0, 0).mult(2).add(E.generateEij(0, 1).mult(3)).add(E.generateEij(0,2).mult(5));
+            m3 = m3.add(E.generateEij(1,0).mult(3)).add(E.generateEij(1,1).mult(6)).add(E.generateEij(1,2).mult(7));
+            m3 = m3.add(E.generateEij(2,0).mult(9)).add(E.generateEij(2,1).mult(11)).add(E.generateEij(2,2).mult(3));
+            System.out.println(m3);
+            System.out.println(((SquareMatrix) m3).determine());
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
     }
 }
