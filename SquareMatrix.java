@@ -12,13 +12,17 @@ public class SquareMatrix  implements IMatrix {
 
     public SquareMatrix(IMatrix matrix)
     {
-        mMatrix = matrix;
-        if( mMatrix.getWidth() != mMatrix.getHeight())
+        int min = Math.min(matrix.getHeight(), matrix.getWidth());
+        List<Double> list = matrix.getList();
+        List<Double> nlist = new ArrayList<>();
+        for (int i = 0; i < min; i++)
         {
-            int min = Math.min(mMatrix.getHeight(), mMatrix.getWidth());
-            mMatrix.setWidth(min);
-            mMatrix.setHeight(min);
+            for (int j = 0; j < min; j++)
+            {
+                nlist.add(matrix.getCell(i,j));
+            }
         }
+        mMatrix = new RectMatrix(min, min, nlist);
     }
     public SquareMatrix(int n, List<Double> list)
     {
@@ -121,18 +125,6 @@ public class SquareMatrix  implements IMatrix {
     }
 
     @Override
-    public void setWidth(final int width)
-    {
-        mMatrix.setWidth(width);
-    }
-
-    @Override
-    public void setHeight(final int hight)
-    {
-        mMatrix.setHeight(hight);
-    }
-
-    @Override
     public IMatrix mult(double k)
     {
         return new SquareMatrix(mMatrix.mult(k));
@@ -154,6 +146,12 @@ public class SquareMatrix  implements IMatrix {
     public void setCell(final int i, final int j, final double a)
     {
         mMatrix.setCell(i, j, a);
+    }
+
+    @Override
+    public double getCell(final int i, final int j)
+    {
+        return mMatrix.getCell(i, j);
     }
 
     //@Override
@@ -212,6 +210,20 @@ public class SquareMatrix  implements IMatrix {
             m3 = m3.add(E.generateEij(2,0).mult(9)).add(E.generateEij(2,1).mult(11)).add(E.generateEij(2,2).mult(3));
             System.out.println(m3);
             System.out.println(((SquareMatrix) m3).determine());
+
+//              IMatrix rectM = new RectMatrix(3,2);
+//              int a = 1;
+//              for (int i = 0; i < 2; i++)
+//              {
+//                  for (int j = 0; j < 3; j++)
+//                  {
+//                      rectM.setCell(i,j,a++);
+//                  }
+//              }
+//              System.out.println(rectM);
+//              SquareMatrix sM = new SquareMatrix(rectM);
+//            System.out.println(sM);
+
         } catch (Exception e)
         {
             e.printStackTrace();

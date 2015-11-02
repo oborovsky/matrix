@@ -13,11 +13,6 @@ public class RectMatrix implements IMatrix {
         return mWidth;
     }
     @Override
-    public void setWidth(final int width)
-    {
-        mWidth = width;
-    }
-    @Override
     public int getHeight()
     {
         return mHight;
@@ -29,14 +24,8 @@ public class RectMatrix implements IMatrix {
         return new ArrayList<Double>(mList);
     }
 
-    @Override
-    public void setHeight(final int hight)
-    {
-        mHight = hight;
-    }
-
-    protected int mWidth;
-    protected int mHight;
+    private int mWidth;
+    private int mHight;
 
     public RectMatrix(int w, int h)
     {
@@ -52,9 +41,20 @@ public class RectMatrix implements IMatrix {
     }
     public RectMatrix(int w, int h, List<Double> list )
     {
-        mList = list;
         mWidth = w;
         mHight = h;
+        mList = new ArrayList<Double>();
+        int listSize = list.size();
+        for (int i = 0; i < h*w; i++)
+        {
+            if( listSize > i )
+            {
+                mList.add(list.get(i));
+            } else
+            {
+                mList.add(0.0);
+            }
+        }
     }
     @Override
     public IMatrix mult(final double k)
@@ -120,6 +120,12 @@ public class RectMatrix implements IMatrix {
     }
 
     @Override
+    public double getCell(final int i, final int j)
+    {
+        return mList.get(mWidth*i + j);
+    }
+
+    @Override
     public IMatrix generateEij(final int i, final int j)
     {
         IMatrix eij = RectMatrix.generateZeroMatrix(mWidth, mHight);
@@ -175,12 +181,13 @@ public class RectMatrix implements IMatrix {
             list2.add(l2[i]);
         }
 
-        System.out.println(list1);
-        System.out.println(list2);
+//        System.out.println(list1);
+//        System.out.println(list2);
         try
         {
             RectMatrix m1 = new RectMatrix(2, 3, list1);
             System.out.println(m1);
+            System.out.println(m1.getCell(2,1));
             RectMatrix m2 = new RectMatrix(3, 2, list2);
             System.out.println(m2);
             RectMatrix m4 = new RectMatrix(3, 2, list1);
@@ -189,6 +196,7 @@ public class RectMatrix implements IMatrix {
             System.out.println(m3);
             RectMatrix m5 = (RectMatrix) m1.mult(m4);
             System.out.println(m5);
+            System.out.println(m5.getCell(2,2));
             System.out.println(m5.mult(RectMatrix.generateZeroMatrix(3,3)));
             System.out.println(RectMatrix.generateZeroMatrix(3,2).add(m2).mult(2.0).sum());
             System.out.println(new RectMatrix(2,3));
