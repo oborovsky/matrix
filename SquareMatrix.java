@@ -133,7 +133,9 @@ public class SquareMatrix  implements IMatrix {
     @Override
     public IMatrix mult(IMatrix m)
     {
-        return new SquareMatrix(mMatrix.mult(m));
+        IMatrix rectMatrix = mMatrix.mult(m);
+        if (rectMatrix.getHeight() == rectMatrix.getWidth()) return new SquareMatrix(rectMatrix);
+        return rectMatrix;
     }
 
     @Override
